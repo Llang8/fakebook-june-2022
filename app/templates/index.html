@@ -1,0 +1,26 @@
+{% extends './layout.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Home</h1>
+    <p>Welcome to Fakebook, {{ user }}</p>
+    
+    {% if user in users %}
+        <h2>We found you, here's your information:</h2>
+        <p>Eye Color: {{ users[user]['eyeColor'] }}</p>
+        <p>Hair Color: {{ users[user]['hairColor'] }}</p>
+    {% elif user == "" %}
+        <h2>You're not logged in</h2>
+    {% else %}
+        <h2>We couldn't find you</h2>
+    {% endif %}
+
+    {% for u in users %}
+        <div class="card">
+            <h2>{{ u }}</h2>
+            <p>Eye Color: {{ users[u]['eyeColor'] }}</p>
+            <p>Hair Color: {{ users[u]['hairColor'] }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}
