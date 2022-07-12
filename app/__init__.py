@@ -1,7 +1,19 @@
 from flask import Flask, render_template
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 def create_app():
     app = Flask(__name__)
+
+    # Connect our config class to the application instance
+    app.config.from_object(Config)
+
+    db = SQLAlchemy()
+    migrate = Migrate()
+
+    db.init_app(app)
+    migrate.init_app(app, db)
 
     # WHERE ALL OF OUR APP CONFIGURATION HAPPENS
     from app.blueprints.main import bp as main_bp
