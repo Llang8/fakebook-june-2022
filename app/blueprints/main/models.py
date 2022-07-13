@@ -16,3 +16,7 @@ class Post(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def get_user(self):
+        return User.query.get(self.user_id)
+
+

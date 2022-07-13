@@ -4,22 +4,24 @@
 <div class="container">
     <h1>Home</h1>
     <p>Welcome to Fakebook, {{ user }}</p>
-    
-    {% if user in users %}
-        <h2>We found you, here's your information:</h2>
-        <p>Eye Color: {{ users[user]['eyeColor'] }}</p>
-        <p>Hair Color: {{ users[user]['hairColor'] }}</p>
-    {% elif user == "" %}
-        <h2>You're not logged in</h2>
-    {% else %}
-        <h2>We couldn't find you</h2>
-    {% endif %}
 
-    {% for u in users %}
-        <div class="card">
-            <h2>{{ u }}</h2>
-            <p>Eye Color: {{ users[u]['eyeColor'] }}</p>
-            <p>Hair Color: {{ users[u]['hairColor'] }}</p>
+    <form action="http://127.0.0.1:5000/api/status-update" method="POST" class="form-inline">
+        <div class="form-group mb-2 w-75 pr-3">
+          <label for="statusInput" class="sr-only">How are you feeling today?</label>
+          <input type="text" class="form-control w-100" name="statusInput" id="statusInput" placeholder="How are you feeling today?">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2 w-25">Add Post</button>
+    </form>
+
+    {% for p in posts %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p>{{ p.body }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <span>{{ p.get_user().username }}</span>
+                <span>{{ p.date_created }}</span>
+            </div>
         </div>
     {% endfor %}
 </div>

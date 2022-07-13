@@ -1,25 +1,19 @@
 from flask import render_template
 from . import bp as app
+from app.blueprints.main.models import Post
 
 @app.route("/")
 def home():
-    user_dict = {
-        "lucas": {
-            "eyeColor": "blue",
-            "hairColor": "brown"
-        },
-        "joe": {
-            "eyeColor": "gray",
-            "hairColor": "black"
-        },
-        "kevin": {
-            "eyeColor": "brown",
-            "hairColor": "blonde"
-        }
-    }
+    posts = Post.query.all()
+
+    # Sort the queried posts by their date created
+    # Reverse it to make it go from newest to oldest
+    posts.sort(key=lambda post: post.date_created, reverse=True)
+
+    print(posts)
 
     context = {
-        "users": user_dict,
+        "posts": posts,
         "user": "jen"
     }
 
