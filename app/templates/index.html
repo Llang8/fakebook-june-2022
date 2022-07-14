@@ -3,7 +3,9 @@
 {% block content %}
 <div class="container">
     <h1>Home</h1>
-    <p>Welcome to Fakebook, {{ user }}</p>
+    {% if current_user.is_authenticated %}
+        <p>Welcome to Fakebook, {{ current_user.username }}</p>
+    {% endif %}
 
     <form action="http://127.0.0.1:5000/api/status-update" method="POST" class="form-inline">
         <div class="form-group mb-2 w-75 pr-3">

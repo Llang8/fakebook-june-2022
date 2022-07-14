@@ -1,9 +1,16 @@
-from flask import render_template
+from flask import render_template, redirect, url_for
 from . import bp as app
 from app.blueprints.main.models import Post
+from flask_login import login_required, current_user
 
 @app.route("/")
+# @login_required
 def home():
+    # If the user is not logged in, redirect to the login page
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+
+
     posts = Post.query.all()
 
     # Sort the queried posts by their date created

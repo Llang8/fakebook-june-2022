@@ -2,8 +2,10 @@ from flask import Flask, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import LoginManager
 
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +17,7 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+    login_manager.init_app(app)
 
     # WHERE ALL OF OUR APP CONFIGURATION HAPPENS
     from app.blueprints.main import bp as main_bp
