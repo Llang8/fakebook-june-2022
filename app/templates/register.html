@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h1>Register</h1>
-    <form>
+    <form action="/auth/register" method="POST">
         <div class="form-group">
           <label for="inputEmail">Email address</label>
           <input type="email" class="form-control" name="inputEmail" id="inputEmail" aria-describedby="emailHelp">
