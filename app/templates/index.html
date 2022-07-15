@@ -7,7 +7,7 @@
         <p>Welcome to Fakebook, {{ current_user.username }}</p>
     {% endif %}
 
-    <form action="http://127.0.0.1:5000/api/status-update" method="POST" class="form-inline">
+    <form action="/api/status-update" method="POST" class="form-inline">
         <div class="form-group mb-2 w-75 pr-3">
           <label for="statusInput" class="sr-only">How are you feeling today?</label>
           <input type="text" class="form-control w-100" name="statusInput" id="statusInput" placeholder="How are you feeling today?">

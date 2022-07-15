@@ -1,4 +1,4 @@
-from flask import jsonify, request, redirect, flash
+from flask import jsonify, request, redirect, flash, url_for
 from . import bp as app
 from app.blueprints.main.models import Post
 from flask_login import current_user
@@ -39,4 +39,4 @@ def status_update():
     flash('New post added successfully', 'success')
 
     # Once the post is added to the database, send the user back to the homepage
-    return redirect("http://127.0.0.1:5000/")
+    return redirect(url_for('main.home'))
