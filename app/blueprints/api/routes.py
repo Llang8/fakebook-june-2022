@@ -40,3 +40,5 @@ def status_update():
 
     # Once the post is added to the database, send the user back to the homepage
     return redirect(url_for('main.home'))
+
+    
