@@ -4,6 +4,8 @@ from app.blueprints.main.models import User
 from flask_login import login_user, logout_user
 from app import db
 
+from . forms import RegistrationForm
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -27,33 +29,70 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
-    if request.method == "POST":
-        # Query the database for a user with the passed in email
-        check_user = User.query.filter_by(email=request.form['inputEmail']).first()
+    wtform = RegistrationForm()
 
-        # If they already exist, show error. Otherwise, create user
-        if check_user is not None:
-            flash('Error, user already exists', 'danger')
-        else:
-            if request.form['inputPassword'] == request.form['inputPasswordConfirm']:
-                new_user = User(
-                    email=request.form['inputEmail'],
-                    password='',
-                    username=request.form['inputUsername'],
-                    first_name=request.form['inputFirstName'],
-                    last_name = request.form['inputLastName']
-                )
-                new_user.hash_my_password(request.form['inputPassword'])
-                db.session.add(new_user)
-                db.session.commit()
-                flash('User created successfully, please login', 'success')
-                return redirect(url_for('auth.login'))
+    try:
+        if request.method == 'POST' and wtform.validate_on_submit():
+            email = wtform.email.data
+            check_user = User.query.filter_by(email=email).first()
+            
+            if check_user is not None:
+                flash('Error, user already exists', 'danger')
+            
+            
             else:
-                flash('Error, passwords do not match', 'danger')
+                email = wtform.email.data
+                first_name = wtform.first_name.data
+                last_name = wtform.last_name.data
+                username = wtform.username.data
+                password = wtform.password.data
+                confirm_password = wtform.confirm_password.data
 
-        return render_template('register.html')
-    else:
-        return render_template('register.html')
+                if password == confirm_password:
+                    new_user = User(email=email, password='', username=username, first_name=first_name, last_name=last_name)
+                    new_user.hash_my_password(password)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    flash('User created successfully, please login', 'success')
+                    return redirect(url_for('auth.login'))
+                else:
+                    flash('Error, passwords do not match', 'danger')
+        elif request.method == 'POST':
+            flash('Form data not valid', 'danger')
+        else:
+            return render_template('register.html', form = wtform)
+    except:
+        flash('Invalid Form Data: Please check your form')
+        raise Exception('Invalid Form Data: Please check your form')
+    return render_template('register.html', form = wtform)
+
+    # if request.method == "POST":
+    #     # Query the database for a user with the passed in email
+    #     check_user = User.query.filter_by(email=request.form['inputEmail']).first()
+
+    #     # If they already exist, show error. Otherwise, create user
+    #     if check_user is not None:
+    #         flash('Error, user already exists', 'danger')
+    #     else:
+    #         if request.form['inputPassword'] == request.form['inputPasswordConfirm']:
+    #             new_user = User(
+    #                 email=request.form['inputEmail'],
+    #                 password='',
+    #                 username=request.form['inputUsername'],
+    #                 first_name=request.form['inputFirstName'],
+    #                 last_name = request.form['inputLastName']
+    #             )
+    #             new_user.hash_my_password(request.form['inputPassword'])
+    #             db.session.add(new_user)
+    #             db.session.commit()
+    #             flash('User created successfully, please login', 'success')
+    #             return redirect(url_for('auth.login'))
+    #         else:
+    #             flash('Error, passwords do not match', 'danger')
+
+    #     return render_template('register.html', form = wtform)
+    # else:
+    #     return render_template('register.html', form = wtform)
 
 @app.route("/logout")
 def logout():
